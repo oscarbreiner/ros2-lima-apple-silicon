@@ -268,7 +268,3 @@ See [docs/troubleshooting.md](docs/troubleshooting.md) for help with:
 
 Pull requests and improvements are welcome!
 Feel free to submit fixes, new scripts, or notes for other ROS distros.
-
----
-
-Let me know if you'd like this bundled as a final `README.md`, or if you'd like a `Makefile` for `make ros` / `make gui`.

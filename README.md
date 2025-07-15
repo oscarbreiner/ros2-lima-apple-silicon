@@ -90,7 +90,17 @@ cd ros2-lima-apple-silicon
 
 ---
 
-### ✅ 3. Create & Launch the Lima VM
+### ✅ 3. Configure the Lima VM
+
+Before launching, open `.lima/lima.yaml` and:
+
+* Replace `YOUR_MAC_USERNAME` with your actual macOS username
+* (Optional) Uncomment the provisioning scripts for ROS and GUI
+* Confirm `mounts:` are correct for your setup
+
+---
+
+### ✅ 4. Create & Launch the Lima VM
 
 Start the Lima VM using the provided config:
 
@@ -107,7 +117,7 @@ limactl shell lima-vm
 
 ---
 
-### ✅ 4. Install ROS 2 Humble (Inside the VM)
+### ✅ 5. Install ROS 2 Humble (Inside the VM)
 
 Once inside the Lima VM shell:
 
@@ -135,7 +145,7 @@ This script will:
 
 ---
 
-### ✅ 5. (Optional) Enable GUI Access via RDP
+### ✅ 6. (Optional) Enable GUI Access via RDP
 
 Still inside the Lima VM:
 
@@ -169,7 +179,7 @@ portForwards:
 
 ---
 
-### ✅ 6. VS Code Integration (Remote SSH)
+### ✅ 7. VS Code Integration (Remote SSH)
 
 To connect from VS Code:
 
@@ -199,7 +209,7 @@ To connect from VS Code:
 
 ---
 
-### ✅ 7. Docker Integration with Rosetta
+### ✅ 8. Docker Integration with Rosetta
 
 By default, the Lima VM **uses your macOS host’s Docker engine** by mounting the Docker socket. This allows you to run containers from **inside the VM** without installing Docker in the VM itself.
 

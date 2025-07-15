@@ -1,0 +1,71 @@
+vmType: "vz"
+
+# ❗ TODO: Configure your resources
+cpus: 10
+memory: 28GiB
+disk: 100GiB
+
+images:
+  # Native Apple Silicon base image
+  - location: "https://cloud-images.ubuntu.com/releases/22.04/release/ubuntu-22.04-server-cloudimg-arm64.img"
+    arch: "aarch64"
+
+  # Optional: For Rosetta emulation of amd64 Docker containers
+  - location: "https://cloud-images.ubuntu.com/releases/22.04/release/ubuntu-22.04-server-cloudimg-amd64.img"
+    arch: "x86_64"
+
+mounts:
+  - location: "~"              # ✅ Mount entire macOS home directory
+    writable: true
+  - location: "/tmp/lima"      # Scratch space
+    writable: true
+
+portForwards:
+  # ✅ GUI via Microsoft Remote Desktop (RDP)
+  - hostPort: 3389
+    guestPort: 3389
+
+  # ✅ Forward Docker socket from macOS host
+  # ❗ TODO: Replace YOUR_MAC_USERNAME with your actual macOS username
+  - guestSocket: "/Users/YOUR_MAC_USERNAME/.docker/run/docker.sock"
+    hostSocket: "{{.Dir}}/sock/docker.sock"
+
+rosetta:
+  enabled: true
+  binfmt: true
+
+hostResolver:
+  hosts:
+    host.docker.internal: host.lima.internal
+
+networks:
+  - vzNAT: true
+
+provision:
+  # Optional: Automatically install ROS and GUI during first VM boot
+  - mode: system
+    script: |
+      echo "✅ Provisioning started..."
+
+      # ❗ OPTIONAL: Uncomment and set actual repo path if you want auto-setup:
+      # bash /mnt/Users/YOUR_MAC_USERNAME/path-to-repo/scripts/install_ros2_humble.sh
+      # bash /mnt/Users/YOUR_MAC_USERNAME/path-to-repo/scripts/install_gui_desktop.sh
+
+      echo "✅ Provisioning complete (customize this section in .lima/lima.yaml)"
+
+message: |
+  ✅ Lima VM is ready!
+
+  👉 On your **macOS host**, to use Docker from inside the VM:
+     docker context create lima-{{.Name}} --docker "host=unix://{{.Dir}}/sock/docker.sock"
+     docker context use lima-{{.Name}}
+
+  👉 From your **macOS host**, connect to the VM GUI using Microsoft Remote Desktop:
+     - Host: 127.0.0.1
+     - Port: 3389
+     - User/pass: your Linux credentials
+
+  🌐 From inside the **Lima VM**, you can access host services using:
+     http://host.docker.internal
+
+     (Enabled via the 'hostResolver' section of this config)
